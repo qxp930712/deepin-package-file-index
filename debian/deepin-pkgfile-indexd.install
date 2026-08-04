@@ -1,0 +1,4 @@
+usr/bin/deepin-pkgfile-indexd
+usr/share/dbus-1/system-services/com.deepin.pkgfileindex.service
+usr/share/dbus-1/system.d/com.deepin.pkgfileindex.conf
+usr/lib/systemd/system/deepin-pkgfile-indexd.service

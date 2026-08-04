@@ -1,0 +1,28 @@
+Source: deepin-package-file-index
+Section: utils
+Priority: optional
+Maintainer: UnionTech Security <security@uniontech.com>
+Build-Depends: cmake (>= 3.10),
+               debhelper (>= 10),
+               libsqlite3-dev,
+               libdbus-1-dev,
+               pkg-config
+Standards-Version: 4.5.0
+
+Package: deepin-pkgfile-indexd
+Section: utils
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, deepin-pkgfile-index-build, dbus
+Description: D-Bus service for file-to-package index queries
+ Provides a system D-Bus service (com.deepin.pkgfileindex) that allows
+ any D-Bus client to query which deb package owns a given file path.
+
+Package: deepin-pkgfile-index-build
+Section: utils
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libsqlite3-0
+Recommends: deepin-pkgfile-indexd
+Description: CLI tool to build package file index
+ Reads /var/lib/dpkg/status and .list files, generates a SQLite
+ index at /var/cache/deepin/package-file-index/installed.idx.
+ Triggered automatically by dpkg hooks after package changes.

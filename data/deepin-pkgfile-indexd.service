@@ -1,0 +1,15 @@
+[Unit]
+Description=Package File Index D-Bus Service
+After=local-fs.target
+
+[Service]
+Type=dbus
+BusName=com.deepin.pkgfileindex
+ExecStart=/usr/bin/deepin-pkgfile-indexd
+User=root
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+Alias=dbus-com.deepin.pkgfileindex.service

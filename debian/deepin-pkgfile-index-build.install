@@ -1,0 +1,2 @@
+usr/bin/deepin-pkgfile-index-build
+etc/apt/apt.conf.d/80deepin-pkgfile-index /etc/apt/apt.conf.d/

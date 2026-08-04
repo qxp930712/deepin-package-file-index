@@ -1,0 +1,8 @@
+deepin-package-file-index (1.0.1-1) unstable; urgency=low
+
+  * Initial release.
+  * Provides libdeepin-pkgfile-index shared library for file-to-package queries.
+  * Provides deepin-pkgfile-index-build CLI for index generation.
+  * Includes apt post-invoke hook and systemd timer for automatic updates.
+
+ -- UnionTech caimengci <caimengci@uniontech.com>  Sun, 03 Aug 2026 19:00:00 +0800

@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.deepin.pkgfileindex
+Exec=/usr/bin/deepin-pkgfile-indexd
+User=root
