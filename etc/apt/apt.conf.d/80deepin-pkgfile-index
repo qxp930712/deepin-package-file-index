@@ -1,5 +1,1 @@
-DPkg::Post-Invoke {
-  "if [ -x /usr/bin/deepin-pkgfile-index-build ]; then "
-  "  /usr/bin/deepin-pkgfile-index-build --incremental 2>/dev/null || true; "
-  "}";
-};
+DPkg::Post-Invoke { "[ -x /usr/bin/deepin-pkgfile-index-build ] && /usr/bin/deepin-pkgfile-index-build --incremental 2>/dev/null || true"; };

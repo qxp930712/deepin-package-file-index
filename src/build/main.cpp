@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <unordered_map>
 
+#include <unordered_set>
 static const char *SCHEMA[] = {
     "PRAGMA journal_mode = WAL;",
     "PRAGMA synchronous = FULL;",
@@ -219,6 +220,53 @@ int build_index(const std::string &output_path, bool incremental)
         }
     }
 
+    // In incremental mode, remove packages that are no longer installed
+    if (incremental && !existing_pkg_ids.empty()) {
+        std::unordered_set<std::string> current_names;
+        for (const auto &pkg : packages)
+            current_names.insert(pkg.name);
+
+        std::vector<int64_t> removed_ids;
+        for (const auto &ep : existing_pkg_ids) {
+            if (current_names.find(ep.first) == current_names.end())
+                removed_ids.push_back(ep.second);
+        }
+
+        if (!removed_ids.empty()) {
+            std::cout << "Removing " << removed_ids.size() << " uninstalled packages" << std::endl;
+
+            for (int64_t rid : removed_ids) {
+                sqlite3_stmt *del = nullptr;
+                sqlite3_prepare_v2(db,
+                    "DELETE FROM file_package WHERE pkg_id = ?1",
+                    -1, &del, nullptr);
+                sqlite3_bind_int64(del, 1, rid);
+                sqlite3_step(del);
+                sqlite3_finalize(del);
+
+                sqlite3_prepare_v2(db,
+                    "DELETE FROM package_files WHERE pkg_id = ?1",
+                    -1, &del, nullptr);
+                sqlite3_bind_int64(del, 1, rid);
+                sqlite3_step(del);
+                sqlite3_finalize(del);
+
+                sqlite3_prepare_v2(db,
+                    "DELETE FROM desktop_package WHERE pkg_id = ?1",
+                    -1, &del, nullptr);
+                sqlite3_bind_int64(del, 1, rid);
+                sqlite3_step(del);
+                sqlite3_finalize(del);
+
+                sqlite3_prepare_v2(db,
+                    "DELETE FROM packages WHERE pkg_id = ?1",
+                    -1, &del, nullptr);
+                sqlite3_bind_int64(del, 1, rid);
+                sqlite3_step(del);
+                sqlite3_finalize(del);
+            }
+        }
+    }
     sqlite3_stmt *ins_desktop = nullptr;
     sqlite3_prepare_v2(db,
         "INSERT OR REPLACE INTO desktop_package (desktop_path, pkg_id, app_name, exec) "
