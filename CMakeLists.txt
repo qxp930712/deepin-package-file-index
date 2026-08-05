@@ -41,3 +41,7 @@ install(FILES
     data/deepin-pkgfile-indexd.service
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/systemd/system
 )
+install(FILES
+    data/deepin-pkgfile-index
+    DESTINATION /etc/dpkg/dpkg.cfg.d
+)
